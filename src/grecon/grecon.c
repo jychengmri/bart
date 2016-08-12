@@ -25,12 +25,7 @@
 #include "num/ops.h"
 #include "num/gpuops.h"
 
-// #define W3
-#ifndef W3
-#include "wavelet2/wavelet.h"
-#else
 #include "wavelet3/wavthresh.h"
-#endif
 
 #include "iter/iter.h"
 
@@ -58,6 +53,7 @@ void grecon(struct grecon_conf* param,  const long dims1[DIMS], complex float* o
 	const long w1_dims[DIMS], const complex float* weights,
 	complex float* kspace1, bool usegpu)
 {
+	UNUSED(usegpu);
 	const struct sense_conf* conf = param->sense_conf;
 
 	long ksp1_dims[DIMS];
@@ -146,16 +142,13 @@ void grecon(struct grecon_conf* param,  const long dims1[DIMS], complex float* o
 		minsize[0] = MIN(img1_dims[0], 16);
 		minsize[1] = MIN(img1_dims[1], 16);
 		minsize[2] = MIN(img1_dims[2], 16);
-#ifndef W3
-		thresh_op = prox_wavethresh_create(DIMS, img1_dims, FFT_FLAGS, minsize, param->lambda, param->randshift, usegpu);
-#else
+
 		unsigned int wflags = 0;
 		for (unsigned int i = 0; i < 3; i++)
 			if (1 < img1_dims[i])
 				wflags = MD_SET(wflags, i);
 
-		thresh_op = prox_wavelet3_thresh_create(DIMS, img1_dims, wflags, minsize, param->lambda, param->randshift);
-#endif
+		thresh_op = prox_wavelet3_thresh_create(DIMS, img1_dims, wflags, 0u, minsize, param->lambda, param->randshift);
 	}
 
 	italgo_fun_t italgo = NULL;

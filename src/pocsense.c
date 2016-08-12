@@ -30,7 +30,7 @@
 #include "sense/pocs.h"
 #include "sense/optcom.h"
 
-#include "wavelet2/wavelet.h"
+#include "wavelet3/wavthresh.h"
 
 #include "misc/mri.h"
 #include "misc/mmio.h"
@@ -132,9 +132,7 @@ int main_pocsense(int argc, char* argv[])
 		minsize[1] = MIN(ksp_dims[1], 16);
 		minsize[2] = MIN(ksp_dims[2], 16);
 
-		wave_op = wavelet_create(DIMS, ksp_dims, FFT_FLAGS, minsize, true, use_gpu);
-		thresh_op = prox_unithresh_create(DIMS, wave_op, alpha, COIL_FLAG, use_gpu);
-
+		thresh_op = prox_wavelet3_thresh_create(DIMS, ksp_dims, FFT_FLAGS, COIL_FLAG, minsize, alpha, true);
 	}
 #if 0
 	else {

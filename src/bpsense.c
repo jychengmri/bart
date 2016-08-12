@@ -22,6 +22,7 @@
 #include "linops/someops.h"
 #include "linops/linop.h"
 #include "linops/grad.h"
+#include "linops/waveop.h"
 
 #include "iter/thresh.h"
 #include "iter/iter.h"
@@ -29,7 +30,7 @@
 #include "sense/bprecon.h"
 #include "sense/optcom.h"
 
-#include "wavelet2/wavelet.h"
+#include "wavelet3/wavthresh.h"
 
 #include "misc/debug.h"
 #include "misc/mri.h"
@@ -188,8 +189,11 @@ int main_bpsense(int argc, char* argv[])
 
 		bool randshift = true;
 		l1op = linop_identity_create(DIMS, img_dims);
-		conf.l1op_obj = wavelet_create(DIMS, img_dims, FFT_FLAGS, minsize, false, usegpu);
-		l1prox = prox_wavethresh_create(DIMS, img_dims, FFT_FLAGS, minsize, 1., randshift, usegpu);
+
+		long img_strs[DIMS];
+		md_calc_strides(DIMS, img_strs, img_dims, CFL_SIZE);
+		conf.l1op_obj = linop_wavelet3_create(DIMS, FFT_FLAGS, img_dims, img_strs, minsize);
+		l1prox = prox_wavelet3_thresh_create(DIMS, img_dims, FFT_FLAGS, 0u, minsize, 1., randshift);
 	}
 
 
