@@ -522,8 +522,8 @@ int main_pics(int argc, char* argv[])
 		}
 	}
 
-	op = operator_copy_wrapper(2, strs, op);
-	op = operator_loop(DIMS, loop_dims, op);
+	//op = operator_copy_wrapper(2, strs, op);
+	//op = operator_loop(DIMS, loop_dims, op);
 
 	operator_apply(op, DIMS, img_dims, image, DIMS, ksp_dims, kspace);
 
