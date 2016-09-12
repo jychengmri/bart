@@ -41,7 +41,7 @@ ifeq ($(BUILDTYPE), MacOSX)
 	MACPORTS?=1
 endif
 
-ARFLAGS = r
+ARFLAGS = rU
 
 
 # Paths
@@ -73,7 +73,7 @@ CXXFLAGS ?= $(OPT)
 ifeq ($(BUILDTYPE), MacOSX)
 	CC ?= gcc-mp-4.7
 else
-	CC ?= gcc
+	CC ?= gcc-4.9
 	# for symbols in backtraces
 	LDFLAGS += -rdynamic
 endif
@@ -96,7 +96,7 @@ endif
 
 # cuda
 
-CUDA_BASE ?= /usr/local/
+CUDA_BASE ?= /usr/local/cuda
 
 
 # acml
@@ -223,7 +223,7 @@ CUDA_H :=
 CUDA_L :=  
 endif
 
-NVCCFLAGS = -DUSE_CUDA -Xcompiler -fPIC -Xcompiler -fopenmp -O3 -arch=sm_20 -I$(srcdir)/ -m64 -ccbin $(CC)
+NVCCFLAGS = -DUSE_CUDA -D_FORCE_INLINES -Xcompiler -fPIC -Xcompiler -fopenmp -O3 -arch=sm_20 -I$(srcdir)/ -m64 -ccbin $(CC)
 #NVCCFLAGS = -Xcompiler -fPIC -Xcompiler -fopenmp -O3  -I$(srcdir)/
 
 
